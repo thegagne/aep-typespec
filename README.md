@@ -23,7 +23,6 @@ This project implements the following AEP standards with enterprise-grade qualit
 - **AEP-134**: Partial updates with PATCH operations
 - **AEP-160**: Filtering with CEL expressions
 - **AEP-122**: Resource paths
-- **AEP-232-235**: Batch operations with proper URI patterns
 
 ## 🚀 Quick Start
 
