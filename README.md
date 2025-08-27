@@ -6,15 +6,13 @@ A professional TypeSpec project that demonstrates enterprise-grade API designs c
 
 This project serves as a **production-ready reference implementation** for creating APIs that comply with the AEP system. It demonstrates how to use TypeSpec to design APIs that follow industry standards and enterprise best practices, making it an ideal starting point for teams adopting AEP standards.
 
-## 🏗️ What We've Built
-
-We've implemented a **comprehensive SaaS Accounts Management system** that demonstrates full AEP compliance:
+## 🏗️ So far...
 
 - **Accounts**: Complete lifecycle management with filtering, pagination, and status tracking
 - **Error Handling**: RFC 7807 Problem Details with proper HTTP content types
 - **AEP Compliance**: All operations follow AEP naming conventions and parameter standards
 
-**This is a work in progress** - we're building out a complete reference implementation of AEP-compliant APIs. See our [PROJECT_PLAN.md](./PROJECT_PLAN.md) for details on where we're headed next, including additional resources to demonstrate other AEP use cases.
+**This is a work in progress** - the goal is to complete reference implementation of AEP-compliant APIs. See our [PROJECT_PLAN.md](./PROJECT_PLAN.md) for details what's next, including additional resources to demonstrate other AEP use cases.
 
 ## 📋 AEP Standards Implemented
 
