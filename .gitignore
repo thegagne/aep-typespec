@@ -2,7 +2,7 @@
 .DS_Store
 
 # Default TypeSpec output
-tsp-output/
+# tsp-output/ leaving this uncommented so we can demonstrate the openapi.yaml file
 dist/
 
 # Dependency directories

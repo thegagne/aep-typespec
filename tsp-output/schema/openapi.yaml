@@ -1,0 +1,587 @@
+openapi: 3.1.0
+info:
+  title: Example SaaS API
+  contact:
+    name: John Doe
+    email: john.doe@example.com
+    url: https://example.com
+  summary: API for managing accounts in a SaaS application
+  description: Example SaaS API
+  version: 0.0.0
+tags:
+  - name: Accounts
+    description: Accounts
+paths:
+  /accounts:
+    get:
+      operationId: ListAccounts
+      summary: List accounts
+      description: List accounts with optional filtering and pagination
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: order_by
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: max_page_size
+          in: query
+          required: false
+          schema:
+            type: integer
+          explode: false
+        - name: page_token
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAccountsResponse'
+              examples:
+                List accounts:
+                  summary: List accounts
+                  description: List accounts filtered by status == ACTIVE
+                  value:
+                    results:
+                      - path: accounts/acc_123
+                        id: acme-corp
+                        name: Acme Corporation
+                        description: A leading technology company
+                        status: ACTIVE
+                        plan: STARTER
+                        create_time: '2024-01-15T00:00:00Z'
+                        update_time: '2024-01-15T00:00:00Z'
+                    next_page_token: eyJwYWdlIjoyLCJza2lwIjoyNTB9
+                    total_size: 1250
+        '400':
+          description: Validation error response with proper content type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found error response with proper content type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      tags:
+        - Accounts
+    post:
+      operationId: CreateAccount
+      summary: Create account
+      description: Create a new account
+      parameters:
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+              examples:
+                Create new account:
+                  summary: Create new account
+                  description: Create a new account with starter plan and active status
+                  value:
+                    path: accounts/acc_123
+                    id: acme-corp
+                    name: Acme Corporation
+                    description: A leading technology company
+                    status: ACTIVE
+                    plan: STARTER
+                    create_time: '2024-01-15T00:00:00Z'
+                    update_time: '2024-01-15T00:00:00Z'
+        '400':
+          description: Validation error response with proper content type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '409':
+          description: Conflict error response with proper content type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      tags:
+        - Accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccount'
+            examples:
+              Create new account:
+                summary: Create new account
+                description: Create a new account with starter plan and active status
+                value:
+                  id: acme-corp
+                  name: Acme Corporation
+                  description: A leading technology company
+                  status: ACTIVE
+                  plan: STARTER
+  /accounts/{account_id}:
+    get:
+      operationId: GetAccount
+      summary: Get account
+      description: Get an account by ID
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+              examples:
+                Get account by ID:
+                  summary: Get account by ID
+                  description: Retrieve an existing account using its unique identifier
+                  value:
+                    path: accounts/acc_123
+                    id: acme-corp
+                    name: Acme Corporation
+                    description: A leading technology company
+                    status: ACTIVE
+                    plan: STARTER
+                    create_time: '2024-01-15T00:00:00Z'
+                    update_time: '2024-01-15T00:00:00Z'
+        '404':
+          description: Not found error response with proper content type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      tags:
+        - Accounts
+    put:
+      operationId: ApplyAccount
+      summary: Apply account
+      description: Apply an account, whether it exists or not
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+              examples:
+                Apply account changes:
+                  summary: Apply account changes
+                  description: Update existing account or create new one if it doesn't exist
+                  value:
+                    path: accounts/acc_123
+                    id: acme-corp
+                    name: Updated Acme Corp
+                    description: Updated company description
+                    status: ACTIVE
+                    plan: ENTERPRISE
+                    create_time: '2024-01-15T00:00:00Z'
+                    update_time: '2024-01-16T10:00:00Z'
+        '400':
+          description: Validation error response with proper content type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found error response with proper content type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      tags:
+        - Accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccount'
+            examples:
+              Apply account changes:
+                summary: Apply account changes
+                description: Update existing account or create new one if it doesn't exist
+                value:
+                  id: acme-corp
+                  name: Updated Acme Corp
+                  description: Updated company description
+                  status: ACTIVE
+                  plan: ENTERPRISE
+    patch:
+      operationId: UpdateAccount
+      summary: Update account
+      description: Update specific account fields (description or plan only)
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+              examples:
+                Partial update account:
+                  summary: Partial update account
+                  description: Update specific account fields using PATCH operation
+                  value:
+                    path: accounts/acc_123
+                    id: acme-corp
+                    name: Acme Corporation
+                    description: Updated company description with new details
+                    status: ACTIVE
+                    plan: ENTERPRISE
+                    create_time: '2024-01-15T00:00:00Z'
+                    update_time: '2024-01-16T11:00:00Z'
+        '400':
+          description: Validation error response with proper content type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not found error response with proper content type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      tags:
+        - Accounts
+      requestBody:
+        required: true
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccount'
+            examples:
+              Partial update account:
+                summary: Partial update account
+                description: Update specific account fields using PATCH operation
+                value:
+                  name: Acme Corporation
+                  status: ACTIVE
+                  description: Updated company description with new details
+                  plan: ENTERPRISE
+    delete:
+      operationId: DeleteAccount
+      summary: Delete account
+      description: Delete an account
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteAccount'
+              examples:
+                Delete account:
+                  summary: Delete account
+                  description: Remove an account from the system
+                  value: {}
+        '404':
+          description: Not found error response with proper content type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      tags:
+        - Accounts
+components:
+  schemas:
+    Account:
+      type: object
+      required:
+        - id
+        - name
+        - status
+        - plan
+        - create_time
+        - update_time
+      properties:
+        id:
+          type: string
+          description: Unique account identifier
+          examples:
+            - acme-corp
+        name:
+          type: string
+          description: Account name
+          examples:
+            - Acme Corporation
+        description:
+          type: string
+          description: Account description
+          examples:
+            - A leading technology company
+        status:
+          allOf:
+            - $ref: '#/components/schemas/AccountStatus'
+          description: Account status
+          examples:
+            - ACTIVE
+        plan:
+          allOf:
+            - $ref: '#/components/schemas/AccountPlan'
+          description: Account plan/tier
+          examples:
+            - STARTER
+        create_time:
+          type: string
+          description: When the account was created
+          examples:
+            - '2024-01-15T00:00:00Z'
+          readOnly: true
+        update_time:
+          type: string
+          description: When the account was last updated
+          examples:
+            - '2024-01-15T00:00:00Z'
+          readOnly: true
+      allOf:
+        - $ref: '#/components/schemas/BaseResource'
+      description: An account represents an organization or tenant
+      title: Account entity
+      x-aep-resource:
+        singular: account
+        plural: accounts
+        patterns:
+          - accounts
+          - accounts/{account_id}
+    AccountPlan:
+      type: string
+      enum:
+        - STARTER
+        - PROFESSIONAL
+        - ENTERPRISE
+      description: Account plan enumeration
+      title: Available account plans
+    AccountStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - SUSPENDED
+        - INACTIVE
+        - PENDING
+      description: Account status enumeration
+      title: Available account statuses
+    BaseResource:
+      type: object
+      required:
+        - path
+      properties:
+        path:
+          type: string
+          description: The resource path string
+          examples:
+            - accounts/acc_123
+          readOnly: true
+      description: Base resource model with common fields
+      title: Common resource properties
+    CreateAccount:
+      type: object
+      required:
+        - id
+        - name
+        - status
+        - plan
+      properties:
+        id:
+          type: string
+          description: Unique account identifier
+          examples:
+            - acme-corp
+            - acme-corp
+        name:
+          type: string
+          description: Account name
+          examples:
+            - Acme Corporation
+            - Acme Corporation
+        description:
+          type: string
+          description: Account description
+          examples:
+            - A leading technology company
+            - A leading technology company
+        status:
+          allOf:
+            - $ref: '#/components/schemas/AccountStatus'
+          description: Account status
+          examples:
+            - ACTIVE
+            - ACTIVE
+        plan:
+          allOf:
+            - $ref: '#/components/schemas/AccountPlan'
+          description: Account plan/tier
+          examples:
+            - STARTER
+            - STARTER
+      description: Account model for create operations - excludes read-only fields
+      title: Create account response
+      x-aep-resource:
+        singular: account
+        plural: accounts
+        patterns:
+          - accounts
+          - accounts/{account_id}
+    DeleteAccount:
+      type: object
+    ListAccountsResponse:
+      type: object
+      required:
+        - results
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+          description: List of accounts (AEP-132 compliant)
+          examples:
+            - - path: accounts/acc_123
+                id: acme-corp
+                name: Acme Corporation
+                description: A leading technology company
+                status: ACTIVE
+                plan: STARTER
+                create_time: '2024-01-15T00:00:00Z'
+                update_time: '2024-01-15T00:00:00Z'
+        next_page_token:
+          type: string
+          description: Token for the next page of results, empty if no more results (AEP-132 compliant)
+          examples:
+            - eyJwYWdlIjoyLCJza2lwIjoyNTB9
+        total_size:
+          type: integer
+          format: int64
+          description: Total count of resources matching the criteria (AEP-132 compliant)
+          examples:
+            - 1250
+      description: Response containing a list of accounts with pagination
+      title: List accounts response
+      x-aep-resource:
+        singular: account
+        plural: accounts
+        patterns:
+          - accounts/{account_id}
+    ProblemDetails:
+      type: object
+      required:
+        - type
+        - title
+        - status
+      properties:
+        type:
+          type: string
+          description: A URI reference that identifies the problem type
+          examples:
+            - https://api.example.com/errors/invalid-argument
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type
+          examples:
+            - Invalid Argument
+        status:
+          type: integer
+          description: The HTTP status code for this occurrence of the problem
+          examples:
+            - 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem
+          examples:
+            - The request contains invalid arguments
+        instance:
+          type: string
+          description: A URI reference that identifies the specific occurrence of the problem
+          examples:
+            - /products/123
+      description: Base Problem Details model following RFC 7807 standard
+      title: Standard error response format
+    UpdateAccount:
+      type: object
+      required:
+        - name
+        - status
+        - plan
+      properties:
+        name:
+          type: string
+          description: Account name
+          examples:
+            - Acme Corporation
+            - Acme Corporation
+        description:
+          type: string
+          description: Account description
+          examples:
+            - A leading technology company
+            - A leading technology company
+        status:
+          allOf:
+            - $ref: '#/components/schemas/AccountStatus'
+          description: Account status
+          examples:
+            - ACTIVE
+            - ACTIVE
+        plan:
+          allOf:
+            - $ref: '#/components/schemas/AccountPlan'
+          description: Account plan/tier
+          examples:
+            - STARTER
+            - STARTER
+      description: Account model for update operations - excludes read-only fields
+      title: Update account response
+      x-aep-resource:
+        singular: account
+        plural: accounts
+        patterns:
+          - accounts
+          - accounts/{account_id}
+servers:
+  - url: https://api.example.com
+    description: Production API server
+    variables: {}
