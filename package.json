@@ -1,0 +1,23 @@
+{
+  "name": "aep-typespec",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "build": "tsp compile .",
+    "clean": "rm -rf dist docs",
+    "lint:aep": "pnpx @stoplight/spectral-cli lint -r https://raw.githubusercontent.com/aep-dev/aep-openapi-linter/main/spectral.yaml tsp-output/schema/openapi.yaml",
+    "swagger": "docker run --rm -p 8080:8080 -e SWAGGER_JSON=/openapi/openapi.yml -v $(pwd)/tsp-output/schema/openapi.yaml:/openapi/openapi.yml swaggerapi/swagger-ui"
+  },
+  "dependencies": {
+    "@typespec/compiler": "latest",
+    "@typespec/http": "latest",
+    "@typespec/openapi": "^1.3.0",
+    "@typespec/openapi3": "latest",
+    "@typespec/rest": "latest"
+  },
+  "devDependencies": {
+    "@stoplight/spectral-cli": "^6.15.0"
+  }
+}
